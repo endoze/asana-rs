@@ -56,20 +56,32 @@ pub struct FluentRequest<'a, T> {
     pub params: T,
 }
 pub struct AsanaClient {
-    client: &'static httpclient::Client,
+    client: httpclient::Client,
     authentication: AsanaAuth,
 }
 impl AsanaClient {
     pub fn from_env() -> Self {
         Self {
-            client: shared_http_client(),
+            client: shared_http_client().clone(),
             authentication: AsanaAuth::from_env(),
         }
     }
     pub fn with_auth(authentication: AsanaAuth) -> Self {
         Self {
-            client: shared_http_client(),
+            client: shared_http_client().clone(),
             authentication,
+        }
+    }
+    pub fn with_client(client: httpclient::Client, authentication: AsanaAuth) -> Self {
+        Self {
+            client,
+            authentication,
+        }
+    }
+    pub fn with_client_from_env(client: httpclient::Client) -> Self {
+        Self {
+            client,
+            authentication: AsanaAuth::from_env(),
         }
     }
 }
